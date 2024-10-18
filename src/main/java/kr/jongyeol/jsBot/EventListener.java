@@ -9,10 +9,7 @@ import kr.jongyeol.jsBot.data.RawChannel;
 import mx.kenzie.eris.Bot;
 import mx.kenzie.eris.api.entity.Channel;
 import mx.kenzie.eris.api.entity.Embed;
-import mx.kenzie.eris.api.entity.Member;
 import mx.kenzie.eris.api.entity.Message;
-import mx.kenzie.eris.api.entity.command.Option;
-import mx.kenzie.eris.api.entity.command.callback.Autocomplete;
 import mx.kenzie.eris.api.entity.guild.ModifyMember;
 import mx.kenzie.eris.api.entity.message.ActionRow;
 import mx.kenzie.eris.api.entity.message.Button;
@@ -109,22 +106,16 @@ public class EventListener {
                         JModData mod = JModData.getMod(Integer.parseInt(strings[1]));
                         if(mod == null) event.reply(new Message("모드를 찾을 수 없습니다.").withFlag(MessageFlags.EPHEMERAL));
                         else {
-                            Version version = new Version(strings[2]);
-                            if(!DiscordUserData.hasUserData(event.getSource().id())) {
-                                event.reply(new Message("유저 데이터를 찾을 수 없습니다. " + Utility.getChannelMention(JModData.getMod("JALib").getChannelId()) +
-                                    " 모드를 다운로드하고 얼불춤을 실행한 후 다시 시도해주세요").withFlag(MessageFlags.EPHEMERAL));
-                                return;
-                            }
-                            DiscordUserData userData = DiscordUserData.getUserData(event.getSource().id());
-                            userData.addRequestMod(new RawMod(mod, version));
-                            int length = userData.requestMods.length;
-                            event.reply(new Message("모드 적용 요청을 완료하였습니다. 현재 진행중인 요청수 : " + length).withFlag(MessageFlags.EPHEMERAL));
-                            new LogBuilder(event.getSource(), "모드 적용 요청을 하였습니다.")
+                            event.reply(new Message("모드 적용 방식이 변경되어 아래 버튼을 눌러 링크로 이동하셔야 됩니다.",
+                                new Button().label("링크로 이동").style(ButtonStyle.LINK).url("https://jalib.jongyeol.kr/modApplicator/" + mod.getName() + "/" + strings[2]))
+                                .withFlag(MessageFlags.EPHEMERAL));
+                            new LogBuilder(event.getSource(), "모드 적용 요청 링크를 보냈습니다.")
                                 .addField("mod", mod.getName())
-                                .addField("version", version)
+                                .addBlankField(true)
+                                .addField("version", strings[2])
                                 .addField("user", event.getSource())
+                                .addBlankField(true)
                                 .addField("channel", event.getChannel())
-                                .addField("requestLength", length)
                                 .send();
                         }
                     }
@@ -221,7 +212,7 @@ public class EventListener {
                 Button sourceButton = new Button().label("소스 코드").url(source ? ((GithubDownloadLink) link1).getSourceLink(version) :
                     DiscordBot.SAMPLE_URL).style(ButtonStyle.LINK).disabled(!source);
                 Button downloadButton = new Button().label("다운로드").url(link).style(ButtonStyle.LINK).disabled(link.isEmpty());
-                Button applyButton = new Button("apply-" + mod.getId() + "-" + version, "모드 적용");
+                Button applyButton = new Button().label("모드 적용").url("https://jalib.jongyeol.kr/modApplicator/" + mod.getName() + "/" + version).style(ButtonStyle.LINK);
                 message.setComponents(new ActionRow(sourceButton, downloadButton, applyButton));
                 message.attachments = event.attachments;
                 message.withFlag(MessageFlags.SUPPRESS_EMBEDS);
