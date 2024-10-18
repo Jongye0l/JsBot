@@ -184,6 +184,7 @@ public class EditModData implements SlashCommandAdapter, ModOptionCommand {
                 original = betaMap.containsKey(versionData) ? betaMap.get(versionData) + "" : "null";
                 if(options.containsKey("beta")) modData.getBetaMap().put(versionData, (boolean) options.get("beta"));
                 else modData.getBetaMap().remove(versionData);
+                ConnectOtherLib.setBetaMap(modData, versionData, options.containsKey("beta") ? (boolean) options.get("beta") : null);
                 break;
             case "forceupdate":
                 original = modData.isForceUpdate() + "";
