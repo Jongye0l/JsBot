@@ -60,8 +60,15 @@ public class EditModData implements SlashCommandAdapter, ModOptionCommand {
             Option.subCommand("betaversion", "베타 버전", nameOption,
                 new Option("betaversion", "베타 버전", OptionType.STRING).required(false)
             ),
+            Option.subCommand("setbetainfo", "베타 정보 설정", nameOption,
+                new Option("version", "버전", OptionType.STRING),
+                new Option("beta", "베타 여부", OptionType.BOOLEAN).required(false)
+            ),
             Option.subCommand("forceupdate", "강제 업데이트", nameOption,
                 new Option("forceupdate", "강제 업데이트", OptionType.BOOLEAN)
+            ),
+            Option.subCommand("forceupdatebeta", "베타 강제 업데이트", nameOption,
+                new Option("forceupdatebeta", "베타 강제 업데이트", OptionType.BOOLEAN)
             ),
             Option.subCommand("forceupdatehandle", "세부 강제 업데이트", nameOption,
                 new Option("minversion", "최소 버전", OptionType.STRING),
@@ -170,10 +177,23 @@ public class EditModData implements SlashCommandAdapter, ModOptionCommand {
                 modData.setBetaVersion(new Version((String) options.get("betaversion")));
                 ConnectOtherLib.setBetaVersion(modData, modData.getBetaVersion());
                 break;
+            case "setbetainfo":
+                version = (String) options.get("version");
+                versionData = new Version(version);
+                Map<Version, Boolean> betaMap = modData.getBetaMap();
+                original = betaMap.containsKey(versionData) ? betaMap.get(versionData) + "" : "null";
+                if(options.containsKey("beta")) modData.getBetaMap().put(versionData, (boolean) options.get("beta"));
+                else modData.getBetaMap().remove(versionData);
+                break;
             case "forceupdate":
                 original = modData.isForceUpdate() + "";
                 modData.setForceUpdate((boolean) options.get("forceupdate"));
                 ConnectOtherLib.setForceUpdate(modData, modData.isForceUpdate());
+                break;
+            case "forceupdatebeta":
+                original = modData.isForceUpdateBeta() + "";
+                modData.setForceUpdateBeta((boolean) options.get("forceupdatebeta"));
+                ConnectOtherLib.setForceUpdateBeta(modData, modData.isForceUpdateBeta());
                 break;
             case "forceupdatehandle":
                 original = null;
