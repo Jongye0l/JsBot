@@ -107,7 +107,8 @@ public class EventListener {
                         if(mod == null) event.reply(new Message("모드를 찾을 수 없습니다.").withFlag(MessageFlags.EPHEMERAL));
                         else {
                             event.reply(new Message("모드 적용 방식이 변경되어 아래 버튼을 눌러 링크로 이동하셔야 됩니다.",
-                                new Button().label("링크로 이동").style(ButtonStyle.LINK).url("https://jalib.jongyeol.kr/modApplicator/" + mod.getName() + "/" + strings[2]))
+                                new Button().label("링크로 이동(서버 1)").style(ButtonStyle.LINK).url("https://jalib.jongyeol.kr/modApplicator/" + mod.getName() + "/" + strings[2]),
+                                new Button().label("링크로 이동(서버 2)").style(ButtonStyle.LINK).url("https://jalib2.jongyeol.kr/modApplicator/" + mod.getName() + "/" + strings[2]))
                                 .withFlag(MessageFlags.EPHEMERAL));
                             new LogBuilder(event.getSource(), "모드 적용 요청 링크를 보냈습니다.")
                                 .addField("mod", mod.getName())
@@ -212,8 +213,9 @@ public class EventListener {
                 Button sourceButton = new Button().label("소스 코드").url(source ? ((GithubDownloadLink) link1).getSourceLink(version) :
                     DiscordBot.SAMPLE_URL).style(ButtonStyle.LINK).disabled(!source);
                 Button downloadButton = new Button().label("다운로드").url(link).style(ButtonStyle.LINK).disabled(link.isEmpty());
-                Button applyButton = new Button().label("모드 적용").url("https://jalib.jongyeol.kr/modApplicator/" + mod.getName() + "/" + version).style(ButtonStyle.LINK);
-                message.setComponents(new ActionRow(sourceButton, downloadButton, applyButton));
+                Button applyButton1 = new Button().label("모드 적용(서버 1)").url("https://jalib.jongyeol.kr/modApplicator/" + mod.getName() + "/" + version).style(ButtonStyle.LINK);
+                Button applyButton2 = new Button().label("모드 적용(서버 2)").url("https://jalib2.jongyeol.kr/modApplicator/" + mod.getName() + "/" + version).style(ButtonStyle.LINK);
+                message.setComponents(new ActionRow(sourceButton, downloadButton, applyButton1, applyButton2));
                 message.attachments = event.attachments;
                 message.withFlag(MessageFlags.SUPPRESS_EMBEDS);
                 if(version.equals(latestVersion)) {
@@ -223,7 +225,7 @@ public class EventListener {
                     message.edit();
                     Channel channel = mod.getChannel();
                     event.delete();
-                    sendReleaseMessageAdditionChannel(beta, mod, text, message, true, version, sourceButton, downloadButton, applyButton);
+                    sendReleaseMessageAdditionChannel(beta, mod, text, message, true, version, sourceButton, downloadButton, applyButton1, applyButton2);
                     message.await();
                     channel.await();
                     new LogBuilder(event.member.user, "모드 업로드를 수정하였습니다.")
@@ -247,7 +249,7 @@ public class EventListener {
                 event.delete();
                 if(beta) mod.setLatestBetaVersion(version);
                 else mod.setLatestVersion(version);
-                sendReleaseMessageAdditionChannel(beta, mod, text, message, false, version, sourceButton, downloadButton, applyButton);
+                sendReleaseMessageAdditionChannel(beta, mod, text, message, false, version, sourceButton, downloadButton, applyButton1, applyButton2);
                 message.await();
                 channel.await();
                 mod.announce();
@@ -332,7 +334,7 @@ public class EventListener {
     }
 
     private static void sendReleaseMessageAdditionChannel(boolean beta, JModData mod, String text, Message message, boolean edit, Version version,
-                                                             Button sourceButton, Button downloadButton, Button applyButton) {
+                                                             Button sourceButton, Button downloadButton, Button applyButton1, Button applyButton2) {
         mod.getAdditionalChannels().forEach(ch -> {
             if(!ch.isBeta() && beta) return;
             Variables.executor.execute(() -> {
@@ -350,7 +352,7 @@ public class EventListener {
                     }
                 }
                 Message message1 = new Message(builder1.toString());
-                message1.setComponents(ch.isApply() ? new ActionRow(sourceButton, downloadButton, applyButton) : new ActionRow(sourceButton, downloadButton));
+                message1.setComponents(ch.isApply() ? new ActionRow(sourceButton, downloadButton, applyButton1, applyButton2) : new ActionRow(sourceButton, downloadButton));
                 message1.attachments = message.attachments;
                 message1.withFlag(MessageFlags.SUPPRESS_EMBEDS);
                 if(edit) {
