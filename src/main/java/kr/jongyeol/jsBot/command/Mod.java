@@ -35,9 +35,9 @@ public class Mod implements SlashCommandAdapter, ModOptionCommand {
     public Command getCommandData(Command data) {
         Option nameOption = getModNameOptionPublic();
         Option wantRole = Option.ofStrings("wantrole", "추가할 역할",
-            new Option.Choice<>("release", "업로드 핑"),
-            new Option.Choice<>("progress", "근황 핑"),
-            new Option.Choice<>("beta", "베타 핑")
+            new Option.Choice<>("업로드 핑", "release"),
+            new Option.Choice<>("근황 핑", "progress"),
+            new Option.Choice<>("베타 핑", "beta")
         );
         Option channel = new Option("channel", "채널", OptionType.CHANNEL);
         return data.description("모드 관련 명령어입니다.").dm_permission(false)
@@ -170,18 +170,20 @@ public class Mod implements SlashCommandAdapter, ModOptionCommand {
             case "setrole":
                 long guild = Long.parseLong(event.guild_id);
                 ModRoles roles = modData.getRolesOrNew(guild);
+                long role = Long.parseLong((String) options.get("role"));
                 switch((String) options.get("wantrole")) {
                     case "release":
-                        roles.setReleaseRole((long) options.get("role"));
+                        roles.setReleaseRole(role);
                         break;
                     case "progress":
-                        roles.setProgressRole((long) options.get("role"));
+                        roles.setProgressRole(role);
                         break;
                     case "beta":
-                        roles.setBetaReleaseRole((long) options.get("role"));
+                        roles.setBetaReleaseRole(role);
                         break;
+                    default:
+                        throw new IllegalArgumentException("Invalid wantrole: " + options.get("wantrole"));
                 }
-                modData.setRoles(guild, roles);
                 modData.getAdditionalChannels().stream().filter(addChannel -> addChannel.getGuild() == guild).forEach(modData::announce);
                 modData.save();
                 event.reply("역할을 설정했습니다.");
