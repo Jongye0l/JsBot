@@ -45,11 +45,11 @@ public interface ModOptionCommand extends SlashCommandAdapter {
             }
             if(!option.focused) continue;
             event.respond(switch(option.name) {
-                case "modname" -> new Autocomplete(Stream.of(ModData.getModNames()).filter(name -> name.toLowerCase().startsWith((String) option.value)).map(name ->
+                case "modname" -> new Autocomplete(Stream.of(ModData.getModNames()).filter(name -> name.toLowerCase().startsWith(((String) option.value).toLowerCase())).map(name ->
                     new Option.Choice<>(name, name)).toArray(Option.Choice[]::new));
-                case "modname0" -> new Autocomplete(Arrays.stream(JModData.getModList()).filter(mod -> !mod.isPrivateMod() && mod.getName().toLowerCase().startsWith((String) option.value)).map(mod ->
+                case "modname0" -> new Autocomplete(Arrays.stream(JModData.getModList()).filter(mod -> !mod.isPrivateMod() && mod.getName().toLowerCase().startsWith(((String) option.value).toLowerCase())).map(mod ->
                     new Option.Choice<>(mod.getName(), mod.getName())).toArray(Option.Choice[]::new));
-                case "modname1" -> new Autocomplete(Arrays.stream(JModData.getModList()).filter(mod -> mod.getName().toLowerCase().startsWith((String) option.value)).map(mod ->
+                case "modname1" -> new Autocomplete(Arrays.stream(JModData.getModList()).filter(mod -> mod.getName().toLowerCase().startsWith(((String) option.value).toLowerCase())).map(mod ->
                     new Option.Choice<>(mod.getName(), mod.getName())).toArray(Option.Choice[]::new));
                 default -> null;
             });
