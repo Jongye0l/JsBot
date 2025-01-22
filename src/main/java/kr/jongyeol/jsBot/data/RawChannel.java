@@ -16,14 +16,15 @@ public class RawChannel {
     private long guild;
     private long channel;
     private boolean beta;
-    private boolean apply = true;
+    private boolean apply;
     private long lastAnnounce = -1;
     private final Map<Version, Long> releaseMessage = new HashMap<>();
 
-    public RawChannel(long guild, long channel, boolean beta) {
+    public RawChannel(long guild, long channel, boolean beta, boolean apply) {
         this.guild = guild;
         this.channel = channel;
         this.beta = beta;
+        this.apply = apply;
     }
 
     public String getChannelUrl() {
