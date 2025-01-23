@@ -72,6 +72,7 @@ public class EventListener {
     }
 
     public static void onGuildMemberUpdateBoostTime(UpdateGuildMember event) {
+        if(Long.parseLong(event.guild_id) != JSettings.getInstance().getGuildId()) return;
         if(event.premium_since == null) return;
         if(boostMap.containsKey(event.user.id()) && boostMap.get(event.user.id()).equals(event.premium_since)) return;
         boostMap.put(event.user.id(), event.premium_since);
