@@ -1,5 +1,6 @@
 package kr.jongyeol.jsBot;
 
+import kr.jongyeol.jaServer.Logger;
 import kr.jongyeol.jsBot.command.*;
 import mx.kenzie.eris.Bot;
 import mx.kenzie.eris.api.entity.command.Command;
@@ -27,10 +28,10 @@ public class DiscordBot {
         commands.add(new AnnounceMod());
         commands.add(new EditModData());
         commands.add(new Mod());
+        commands.add(new Timeout());
         for(SlashCommandAdapter command : commands)
             for(String name : command.getCommandNames())
-                if(command.guildOnly())
-                    bot.registerCommand(command.getCommandData(Command.slash(name, null)), JSettings.getInstance().getGuildId(), command);
+                if(command.guildOnly()) bot.registerCommand(command.getCommandData(Command.slash(name, null)), JSettings.getInstance().getGuildId(), command);
                 else bot.registerCommand(command.getCommandData(Command.slash(name, null)), command);
     }
 }
