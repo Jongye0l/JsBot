@@ -252,8 +252,8 @@ public class EventListener {
                 else mod.setLatestVersion(version);
                 sendReleaseMessageAdditionChannel(beta, mod, text, message, false, version, sourceButton, downloadButton, applyButton1, applyButton2);
                 message.await();
-                channel.await();
                 mod.announce();
+                channel.await();
                 mod.addRelease(version, message.id());
                 new LogBuilder(event.member.user, "모드를 업로드 하였습니다.")
                     .addField("name", mod.getName())
@@ -291,6 +291,7 @@ public class EventListener {
                     bot.getAPI().sendMessage(ch.getChannel(), message1);
                 });
                 message.await();
+                mod.announce();
                 channel.await();
                 new LogBuilder(event.member.user, "모드 근황을 업로드하였습니다.")
                     .addField("name", mod.getName())
