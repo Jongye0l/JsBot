@@ -273,7 +273,7 @@ public class EventListener {
                 JModData mod = JModData.getMod(Long.parseLong(event.channel_id));
                 if(mod == null) return;
                 StringBuilder builder = new StringBuilder();
-                for(int i = 1; i < line.length; i++) builder.append(line[i]).append("\n");
+                for(int i = 1; i < line.length; i++) builder.append(customMessage(line[i])).append("\n");
                 builder.replace(builder.length() - 1, builder.length() - 1, "");
                 String text = builder.toString();
                 builder.append(MAGIC_MESSAGE).append(mod.progressPing()).append(JSettings.getAllProgressPing());
