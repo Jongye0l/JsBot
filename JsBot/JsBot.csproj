@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
+        <PublishTrimmed>true</PublishTrimmed>
+        <TrimMode>link</TrimMode>
+        <MvcEnhancedModelMetadataSupport>true</MvcEnhancedModelMetadataSupport>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\JALib.Server\JALib.Server.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\JALib.Server\wwwroot\**" LinkBase="wwwroot" CopyToPublishDirectory="PreserveNewest" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="NetCord" Version="1.0.0-beta.12" />
+      <PackageReference Include="NetCord.Hosting" Version="1.0.0-beta.12" />
+      <PackageReference Include="NetCord.Hosting.AspNetCore" Version="1.0.0-beta.12" />
+      <PackageReference Include="NetCord.Hosting.Services" Version="1.0.0-beta.12" />
+      <PackageReference Include="NetCord.Services" Version="1.0.0-beta.12" />
+    </ItemGroup>
+
+</Project>
