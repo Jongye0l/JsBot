@@ -45,7 +45,7 @@ public static class ModAnnounce {
 			return;
 		}
 		ulong guildId = interaction.GuildId!.Value;
-		GuildUser member = interaction.Guild!.Users[interaction.User.Id];
+		GuildUser member = interaction.User as GuildUser ?? await DiscordBot.Rest.GetGuildUserAsync(guildId, interaction.User.Id);
 		if(member.RoleIds.Contains(role)) {
 			await DiscordBot.Rest.RemoveGuildUserRoleAsync(guildId, member.Id, role);
 			await interaction.SendResponseAsync(InteractionCallback.Message(new InteractionMessageProperties().WithContent(Utility.GetRoleMention(role) + " 역할을 제거하였습니다.").WithFlags(MessageFlags.Ephemeral)));
