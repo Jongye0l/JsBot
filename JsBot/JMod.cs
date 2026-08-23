@@ -155,7 +155,7 @@ public class JMod : ModData {
 	public void SetLatestVersion(VersionStruct version) {
 		ConnectOtherLib.SetVersion(this, version);
 		Version = version;
-		if(BetaVersion.IsNull() || version.IsUpper(BetaVersion)) SetLatestBetaVersion(version);
+		if(BetaVersion.IsNull() || BetaVersion.IsUpper(version)) SetLatestBetaVersion(version);
 	}
 
 	public void SetLatestBetaVersion(VersionStruct betaVersion) {
