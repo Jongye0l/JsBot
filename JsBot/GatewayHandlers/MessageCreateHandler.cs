@@ -147,6 +147,7 @@ public partial class MessageCreateHandler : IMessageCreateGatewayHandler {
 		await message.DeleteAsync();
 		if(beta) mod.SetLatestBetaVersion(version);
 		else mod.SetLatestVersion(version);
+		mod.SetBeta(version, beta);
 		mod.AddRelease(version, sent.Id);
 		await SendReleaseToAdditionalChannels(beta, mod, text, false, version, sourceButton, downloadButton, applyButton1, applyButton2);
 		await mod.Announce();

@@ -77,6 +77,12 @@ public class JMod : ModData {
 
 	public void AddRelease(VersionStruct version, ulong id) => ReleaseMessage[version] = id;
 
+	public void SetBeta(VersionStruct version, bool beta) {
+		if(beta) BetaMap[version] = true;
+		else BetaMap.Remove(version);
+		ConnectOtherLib.SetBetaMap(this, version, beta ? true : null);
+	}
+
 	public async Task Announce() {
 		MessageProperties message = new MessageProperties().WithContent(" ").WithComponents([
 			new ActionRowProperties([
