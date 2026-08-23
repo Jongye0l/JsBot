@@ -147,9 +147,9 @@ public partial class MessageCreateHandler : IMessageCreateGatewayHandler {
 		await message.DeleteAsync();
 		if(beta) mod.SetLatestBetaVersion(version);
 		else mod.SetLatestVersion(version);
+		mod.AddRelease(version, sent.Id);
 		await SendReleaseToAdditionalChannels(beta, mod, text, false, version, sourceButton, downloadButton, applyButton1, applyButton2);
 		await mod.Announce();
-		mod.AddRelease(version, sent.Id);
 		new LogBuilder(message.Author, "모드를 업로드 하였습니다.")
 			.AddField("name", mod.Name)
 			.AddField("id", mod.Id)
